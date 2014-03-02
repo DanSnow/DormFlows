@@ -3,6 +3,6 @@ __pycache__
 *_ui.py
 *_rc.py
 
-src/ifContraller
+*/ifContraller
 
 .zcache
