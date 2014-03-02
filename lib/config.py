@@ -39,15 +39,25 @@ class Config(object):
     except EnvironmentError as e:
       print(e)
 
-  def __getitem__(self, name):
-    if self._config is not None:
-      return self._config[name]
+  def _checkIsNone(func):
+    def warpper(self, *args, **kwargs):
+      if self._config is not None:
+        try:
+          return func(self, *args, **kwargs)
+        except KeyError:
+          return None
+    return warpper
 
+  @_checkIsNone
+  def __getitem__(self, name):
+    return self._config[name]
+
+  @_checkIsNone
   def __setitem__(self, name, value):
-    if self._config is not None:
       self._config[name] = value
 
+  @_checkIsNone
   def __delitem__(self, name):
-    if self._config is not None:
       del self._config[name]
+
 
