@@ -6,6 +6,7 @@ import os
 import subprocess
 
 import netifaces
+import notify2
 
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
@@ -48,10 +49,12 @@ class DromFlows(QDialog):
 
     self.showIP()
 
+  @pyqtSlot(int)
   def checkStateChanged(self, stat):
     self.chkStat = True if stat == Qt.Checked else False
     self._disableInterface()
 
+  @pyqtSlot()
   def updateLimit(self):
     limit = self.ui.limitLE.text()
     if limit:
