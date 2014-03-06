@@ -9,6 +9,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
 from config import Config
+import util
 
 from settingDialog_ui import Ui_settingDia
 
@@ -29,6 +30,11 @@ class SettingDialog(QDialog):
 
   def setConfig(self, config):
     self.config = config
+    if self.config["firstRun"]:
+      self._defaultSetting()
+
+  def _defaultSetting():
+    pass
 
   @pyqtSlot()
   def applyAndExit(self):
