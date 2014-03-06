@@ -60,4 +60,7 @@ class Config(object):
   def __delitem__(self, name):
       del self._config[name]
 
+  def update(self, other):
+    self._config.update(other)
+
 
