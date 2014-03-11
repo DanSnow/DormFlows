@@ -2,6 +2,8 @@
 # encoding: utf-8
 
 import sys
+import subprocess
+import re
 
 import netifaces
 
@@ -16,6 +18,18 @@ def checkConnect(interface):
 
 def getIP(interface):
   return _doGetIP(interface)
+
+def getConnectUUID(interface):
+  pipe = subprocess.Popen(['nmcli', 'c', 'status'], stdout = subprocess.PIPE)
+  string = pipe.communicate()[0]
+  lst = string.decode("utf-8").splitlines()
+  res = re.split(r"\s\s+", lst[1])
+  try:
+    idx = res.index(interface)
+    uuid = res[idx - 1]
+    return uuid
+  except ValueError:
+    return None
 
 def _doGetIP(interface):
   try:
