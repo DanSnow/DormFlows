@@ -32,9 +32,27 @@ class SettingDialog(QDialog):
     self.config = config
     if self.config["firstRun"]:
       self._defaultSetting()
+    self.fillSetting()
 
-  def _defaultSetting():
-    pass
+  def _defaultSetting(self):
+    self.config["checkDelay"] = 10000
+    self.config["notifyShowTime"] = 5000
+    self.config["interface"] = "eth0"
+    self.config["disconnectCommand"] = "nmcli d disconnect iface %s --nowait"
+    self.config["connectCommand"] = "nmcli c up %s --nowait"
+    self.config["connectUuid"] = util.getConnectUUID("eth0")
+    print(self.config["connectUuid"])
+
+  def fillSetting(self):
+    self.ui.checkTimeLE.setText(str(self.config["checkDelay"] // 1000))
+    self.ui.notifyTimeLE.setText(str(self.config["notifyShowTime"] // 1000))
+    interfaceList = util.getInterfaceList()
+    self.ui.interfaceCB.addItems(interfaceList)
+    idx = interfaceList.index(self.config["interface"])
+    self.ui.interfaceCB.setCurrentIndex(idx)
+    self.ui.disconnectCmdLE.setText(self.config["disconnectCommand"])
+    self.ui.connectCmdLE.setText(self.config["connectCommand"])
+    self.ui.connectUuidLE.setText(self.config["connectUuid"])
 
   @pyqtSlot()
   def applyAndExit(self):
@@ -48,5 +66,8 @@ class SettingDialog(QDialog):
 if __name__ == '__main__':
   app = QApplication(sys.argv)
   dia = SettingDialog()
+  c = Config()
+  c["firstRun"] = True
+  dia.setConfig(c)
   dia.show()
   app.exec_()
