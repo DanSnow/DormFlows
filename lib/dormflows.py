@@ -108,7 +108,7 @@ class DromFlows(QDialog):
     if self.flows is not None:
       self.ui.flowsL.setText("目前流量： {0} MB".format(self.flows))
       self.ui.flowsProg.setValue(self.flows)
-      self.notify.checkAndNotify()
+      self.notify.checkAndNotify(self.flows)
       if self.flows > 7000:
         self.ui.imgL.setPixmap(self.urgentPic)
       else:
